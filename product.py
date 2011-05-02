@@ -36,6 +36,8 @@ productPath = "Packages"
 productArch = None
 bugUrl = "your distribution provided bug reporting tool."
 productIsFinal = False
+topGroup = ('group-dist', 'conary.rpath.com@rpl:1', '')
+productPackagePath = None
 
 if path is not None:
     f = open(path, "r")
@@ -46,14 +48,14 @@ if path is not None:
         productArch = productStamp[productStamp.index(".")+1:]
         productName = lines[1][:-1]
         productVersion = lines[2][:-1]
-
-        # set productIsFinal
-        isfinal = lines[3].strip().lower()
-        key, sep, isfinal = isfinal.partition("=")
-        productIsFinal = (key == "final" and isfinal == "yes")
-
+        productPath = lines[3][:-1]
     if len(lines) >= 5:
         bugUrl = lines[4][:-1]
+    if len(lines) >= 6:
+        topGroup = lines[5][:-1].split(' ')
+        assert len(topGroup) == 3
+    if len(lines) >= 7:
+        productPackagePath = lines[6].strip()
 
 if os.environ.has_key("ANACONDA_PRODUCTNAME"):
     productName = os.environ["ANACONDA_PRODUCTNAME"]
@@ -67,6 +69,9 @@ if os.environ.has_key("ANACONDA_BUGURL"):
     bugUrl = os.environ["ANACONDA_BUGURL"]
 if os.environ.has_key("ANACONDA_ISFINAL"):
     productIsFinal = True
+
+if not productPackagePath:
+    productPackagePath = '%s/changesets' % productPath
 
 if productVersion == "development": # hack to transform for now
     productVersion = "rawhide"
