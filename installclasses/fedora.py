@@ -44,6 +44,7 @@ class InstallClass(BaseInstallClass):
     sortPriority = 10000
     if productName.startswith("Red Hat Enterprise"):
         hidden = 1
+    hidden = 1
 
     tasks = [(N_("Graphical Desktop"),
               ["admin-tools", "base", "base-x", "core", "editors", "fonts",
