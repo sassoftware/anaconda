@@ -35,6 +35,8 @@ productVersion = "bluesky"
 productPath = "Packages"
 productArch = None
 bugUrl = "your distribution provided bug reporting tool."
+topGroup = ('group-dist', 'conary.rpath.com@rpl:1', '')
+productPackagePath = None
 
 if path is not None:
     f = open(path, "r")
@@ -46,7 +48,14 @@ if path is not None:
         productName = lines[1][:-1]
         productVersion = lines[2][:-1]
     if len(lines) >= 4:
-        bugUrl = lines[3][:-1]
+        productPath = lines[3][:-1]
+    if len(lines) >= 5:
+        bugUrl = lines[4][:-1]
+    if len(lines) >= 6:
+        topGroup = lines[5][:-1].split(' ')
+        assert len(topGroup) == 3
+    if len(lines) >= 7:
+        productPackagePath = lines[6].strip()
 
 if os.environ.has_key("ANACONDA_PRODUCTNAME"):
     productName = os.environ["ANACONDA_PRODUCTNAME"]
@@ -58,6 +67,9 @@ if os.environ.has_key("ANACONDA_PRODUCTARCH"):
     productArch = os.environ["ANACONDA_PRODUCTARCH"]
 if os.environ.has_key("ANACONDA_BUGURL"):
     bugUrl = os.environ["ANACONDA_BUGURL"]
+
+if not productPackagePath:
+    productPackagePath = '%s/changesets' % productPath
 
 if productVersion == "development": # hack to transform for now
     productVersion = "rawhide"
