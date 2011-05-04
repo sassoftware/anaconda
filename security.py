@@ -26,9 +26,13 @@ from pykickstart.constants import *
 import logging
 log = logging.getLogger("anaconda")
 
+SELINUX_DONT_CHANGE = -1
+
 selinux_states = { SELINUX_DISABLED: "disabled",
                    SELINUX_ENFORCING: "enforcing",
-                   SELINUX_PERMISSIVE: "permissive" }
+                   SELINUX_PERMISSIVE: "permissive",
+                   SELINUX_DONT_CHANGE: "disabled",
+                   }
 
 class Security:
     def __init__(self):
@@ -48,6 +52,8 @@ class Security:
         return self.selinux
 
     def writeKS(self, f):
+        if self.selinux == SELINUX_DONT_CHANGE:
+            return
         if not selinux_states.has_key(self.selinux):
             log.error("unknown selinux state: %s" %(self.selinux,))
             return
@@ -55,6 +61,8 @@ class Security:
 	f.write("selinux --%s\n" %(selinux_states[self.selinux],))
 
     def write(self, instPath):
+        if self.selinux == SELINUX_DONT_CHANGE:
+            return
         args = [ "--quiet", "--nostart" ]
 
         if not selinux_states.has_key(self.selinux):
