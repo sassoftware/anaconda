@@ -120,10 +120,12 @@ class rPathBackendBase(AnacondaBackend):
                 packages.recreateInitrd(n, self.anaconda.rootPath)
             w.pop()
 
-        # Since tarballs don't have SELinux contexts, force an autorelabel on
-        # boot.
-        if anaconda.id.security.getSELinux() != security.SELINUX_DISABLED:
-            open(anaconda.rootPath + '/.autorelabel', 'w').close()
+            # Since tarballs don't have SELinux contexts, force a relabel if
+            # anaconda has overwritten the SELinux config. If selinux is set to
+            # "don't change" then also don't write the relabel file, it is up to
+            # the image creator to do so.
+            if anaconda.id.security.getSELinux() > security.SELINUX_DISABLED:
+                open(anaconda.rootPath + '/.autorelabel', 'w').close()
 
     def kernelVersionList(self, rootPath='/'):
         l = []
