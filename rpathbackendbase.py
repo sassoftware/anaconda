@@ -356,4 +356,4 @@ class PackageSource(object):
                 self._switchCD(discnum)
 
         ug = grabber.URLGrabber()
-        return ug.urlgrab("%s/%s" % (self.tree, path), filename)
+        return ug.urlgrab("%s/%s" % (self._baseRepoURL, path), filename)
