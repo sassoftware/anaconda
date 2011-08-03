@@ -187,9 +187,15 @@ class PackageSource(object):
             try:
                 self.configBaseURL()
                 break
-            except SystemError as exception:
-                self.anaconda.methodstr = self.anaconda.intf.methodstrRepoWindow(self.anaconda.methodstr or "cdrom:",
-                                                                                 exception)
+            except SystemError, e:
+                self.anaconda.intf.messageWindow(
+                    _("Error Setting Up Repository"),
+                    _("The following error occurred while setting up the "
+                      "installation repository:\n\n%(e)s\n\nPlease provide the "
+                      "correct information for installing %(productName)s.")
+                    % {'e': e, 'productName': productName})
+                self.anaconda.methodstr = self.anaconda.intf.methodstrRepoWindow(
+                        self.anaconda.methodstr or "cdrom:")
     def _switchCD(self, discnum):
         if os.access("%s/.discinfo" % self.tree, os.R_OK):
             f = open("%s/.discinfo" % self.tree)
