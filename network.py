@@ -548,7 +548,7 @@ class Network:
             line += "\n"
             f.write(line)
 
-    def _copyFileToPath(self, file, instPath='', overwrite=False):
+    def _copyFileToPath(self, file, instPath='', overwrite=True):
         if not os.path.isfile(file):
             return False
         destfile = os.path.join(instPath, file.lstrip('/'))
