@@ -590,18 +590,18 @@ class Network:
 
         # /etc/sysconfig/network
         self._copyFileToPath(networkConfFile, instPath,
-                             overwrite=flags.livecdInstall)
+                             overwrite=True)
 
         # /etc/resolv.conf
         self._copyFileToPath("/etc/resolv.conf", instPath,
-                             overwrite=flags.livecdInstall)
+                             overwrite=True)
 
         # /etc/udev/rules.d/70-persistent-net.rules
         self._copyFileToPath("/etc/udev/rules.d/70-persistent-net.rules",
-                             instPath, overwrite=flags.livecdInstall)
+                             instPath, overwrite=True)
 
         self._copyFileToPath(ipv6ConfFile, instPath,
-                             overwrite=flags.livecdInstall)
+                             overwrite=True)
 
     def disableNMForStorageDevices(self, anaconda, instPath=''):
         for devName, device in self.netdevices.items():
