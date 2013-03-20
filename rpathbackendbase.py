@@ -101,6 +101,7 @@ class rPathBackendBase(AnacondaBackend):
         if os.access("/etc/modprobe.d/anaconda.conf", os.R_OK):
             shutil.copyfile("/etc/modprobe.d/anaconda.conf", 
                             anaconda.rootPath + "/etc/modprobe.d/anaconda.conf")
+        self.enableNetwork()
         anaconda.id.network.write()
         anaconda.id.network.copyConfigToPath(instPath=anaconda.rootPath)
         anaconda.id.storage.write(anaconda.rootPath)
@@ -126,6 +127,12 @@ class rPathBackendBase(AnacondaBackend):
             # the image creator to do so.
             if anaconda.id.security.getSELinux() > security.SELINUX_DISABLED:
                 open(anaconda.rootPath + '/.autorelabel', 'w').close()
+
+    def enableNetwork(self):
+        devices = sorted(self.anaconda.id.network.netdevices.items())
+        if not devices or any(x[1].get('ONBOOT') == 'yes' for x in devices):
+            return
+        devices[0][1].set(('ONBOOT', 'yes'))
 
     def kernelVersionList(self, rootPath='/'):
         l = []
