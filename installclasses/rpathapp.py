@@ -39,7 +39,6 @@ class InstallClass(RHELInstallClass):
         # Copied from rhel.py because supercalling it is hard due to a
         # weird importer bug.
         BaseInstallClass.setInstallData(self, anaconda)
-        BaseInstallClass.setDefaultPartitioning(self, anaconda.id.storage,
-                anaconda.platform)
+        self.setDefaultPartitioning(anaconda.id.storage, anaconda.platform)
         # Don't overwrite selinux config by default.
         anaconda.id.security.setSELinux(security.SELINUX_DONT_CHANGE)
