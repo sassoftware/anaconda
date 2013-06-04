@@ -148,7 +148,7 @@ class rPathBackendBase(AnacondaBackend):
                 elif 'smp' in file:
                     tag = 'smp'
                 else:
-                    tag = ''
+                    tag = 'base'
                 n = file.split('-')
                 version = '-'.join(n[1:])
                 arch = n[-1]
